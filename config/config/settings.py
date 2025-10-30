@@ -174,9 +174,9 @@ INSTALLED_APPS += [
 REST_FRAMEWORK['DEFAULT_SCHEMA_CLASS'] = 'drf_spectacular.openapi.AutoSchema'
 
 # --- Configuration spéciale pour GitHub Actions (CI) ---
-if os.getenv('GITHUB_WORKFLOW'):
-    print("⚙️ Running in GitHub Actions CI mode")
-    
+if os.getenv('DJANGO_CI') == 'true' or os.getenv('GITHUB_WORKFLOW'):
+    print("⚙️ Running in GitHub Actions CI mode (SQLite + AllowAny)")
+
     # Base SQLite pour éviter les erreurs de connexion PostgreSQL
     DATABASES = {
         'default': {
