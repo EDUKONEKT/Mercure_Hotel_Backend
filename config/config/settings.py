@@ -104,6 +104,18 @@ DATABASES = {
     }
 }  
 
+import os
+
+# Si on est dans GitHub Actions, on utilise SQLite pour éviter l'erreur de connexion PostgreSQL
+if os.getenv('GITHUB_WORKFLOW'):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'test_db.sqlite3',
+        }
+    }
+
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
