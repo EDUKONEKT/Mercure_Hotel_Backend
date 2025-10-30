@@ -14,25 +14,13 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
-from django.urls import include, path
-from django.contrib import admin
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, SpectacularRedocView
 from django.urls import path, include
-from rest_framework import permissions
-from drf_yasg.views import get_schema_view
-from drf_yasg import openapi
+from django.contrib import admin
 
 
-schema_view = get_schema_view(
-    openapi.Info(
-        title="Mercure Hotel API",
-        default_version='v1',
-        description="Documentation de l’API Mercure Hotel",
-        contact=openapi.Contact(email="contact@mercurehotel.com"),
-    ),
-    public=True,
-    permission_classes=(permissions.AllowAny,),
-)
+
+
 
 
 urlpatterns = [
@@ -45,6 +33,7 @@ urlpatterns = [
     path('api/rooms/', include('rooms.urls')),
     path('api/spa/', include('spa.urls')),
     path('api/sauna/', include('sauna.urls')),
-    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='swagger-ui'),
-    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='redoc'),
+    path('schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('swagger/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+    path('redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
 ]
