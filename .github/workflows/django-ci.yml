@@ -11,9 +11,10 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      GITHUB_WORKFLOW: "true"
-      SECRET_KEY: "test-secret-ci"
-      DEBUG: "True"
+       DJANGO_SECRET_KEY: test_secret
+       DJANGO_DEBUG: False
+       DATABASE_URL: postgres://postgres:postgres@localhost:5432/mercure_test
+       GITHUB_WORKFLOW: true
 
     steps:
       - name: Checkout repository
