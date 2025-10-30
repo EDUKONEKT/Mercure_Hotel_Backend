@@ -106,14 +106,6 @@ DATABASES = {
 
 import os
 
-# Si on est dans GitHub Actions, on utilise SQLite pour éviter l'erreur de connexion PostgreSQL
-if os.getenv('GITHUB_WORKFLOW'):
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'test_db.sqlite3',
-        }
-    }
 
 
 
@@ -181,8 +173,19 @@ INSTALLED_APPS += [
 
 REST_FRAMEWORK['DEFAULT_SCHEMA_CLASS'] = 'drf_spectacular.openapi.AutoSchema'
 
-# --- Configuration spéciale pour la CI GitHub ---
+# --- Configuration spéciale pour GitHub Actions (CI) ---
 if os.getenv('GITHUB_WORKFLOW'):
+    print("⚙️ Running in GitHub Actions CI mode")
+    
+    # Base SQLite pour éviter les erreurs de connexion PostgreSQL
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'test_db.sqlite3',
+        }
+    }
+
+    # Désactivation des permissions strictes
     REST_FRAMEWORK['DEFAULT_PERMISSION_CLASSES'] = (
         'rest_framework.permissions.AllowAny',
     )
