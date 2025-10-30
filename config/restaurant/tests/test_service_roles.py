@@ -85,7 +85,7 @@ def test_create_booking_by_role(api_client, sample_meal, role, expected_status, 
     """Vérifie qui peut créer une réservation"""
     user = create_user_with_role(f"user_{role}", role)
     headers = get_auth_headers(user)
-    data = {"restaurant": sample_meal.id, "date": "2025-11-01", "quantity": 2}
+    data = {"meal": sample_meal.id, "date": "2025-11-01", "quantity": 2}
 
     response = api_client.post(booking_url, data, content_type='application/json', **headers)
     assert response.status_code == expected_status
@@ -102,7 +102,7 @@ def test_delete_booking_permissions(api_client, sample_meal, role, expected_stat
     # Crée la réservation par un autre utilisateur
     owner = create_user_with_role("owner_client", AccountType.CLIENT)
     owner_account = owner.account
-    booking = MealBooking.objects.create(restaurant=sample_meal, account=owner_account,
+    booking = MealBooking.objects.create(meal=sample_meal, account=owner_account,
                                         date="2025-11-01", quantity=2, total_price=100)
     user = create_user_with_role(f"user_{role}", role)
     headers = get_auth_headers(user)
@@ -118,7 +118,7 @@ def test_receptionist_can_create_booking_for_client(api_client, sample_meal, boo
     client = create_user_with_role("client_user", AccountType.CLIENT)
     headers = get_auth_headers(receptionist)
     data = {
-        "restaurant": sample_meal.id,
+        "meal": sample_meal.id,
         "account": client.account.id,  # 👈 il indique pour qui
         "date": "2025-11-01", 
         "quantity": 2,

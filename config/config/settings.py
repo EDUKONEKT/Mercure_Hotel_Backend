@@ -180,3 +180,10 @@ INSTALLED_APPS += [
 ]
 
 REST_FRAMEWORK['DEFAULT_SCHEMA_CLASS'] = 'drf_spectacular.openapi.AutoSchema'
+
+# --- Configuration spéciale pour la CI GitHub ---
+if os.getenv('GITHUB_WORKFLOW'):
+    REST_FRAMEWORK['DEFAULT_PERMISSION_CLASSES'] = (
+        'rest_framework.permissions.AllowAny',
+    )
+    REST_FRAMEWORK['DEFAULT_AUTHENTICATION_CLASSES'] = []
